@@ -1,35 +1,13 @@
-import express from "express";
-import conectarAoBanco from "./src/config/dbconfig.js";
-
-const conexao = await conectarAoBanco(process.env.STRING_CONEXAO);
-
-async function getTodosPosts() {
-    const db = conexao.db("alura-instabytes")
-    const colecao = db.collection("posts")
-        return colecao.find().toArray()
-    
-};
+// Importações necessárias
+import express from "express"; // Importa o framework Express para criar o servidor web
+import routes from "./src/routes/postsRoutes.js";
 
 const app = express();
-app.use(express.json());
+routes(app);
 
+// Inicia o servidor na porta 3000
 app.listen(3000, () => {
-    console.log("servidor escutando");
+    console.log("Servidor escutando na porta 3000");
 });
 
-app.get("/posts",async (req,res) => {
-    const posts = await getTodosPosts()
-    res.status(200).json(posts);
-});
 
-function buscarporid(id){
-    return posts.findIndex((post)=>{
-        return post.id===Number(id)
-    });
-};
-
-
-app.get("/posts/:id",(req,res) => {
-    const index = buscarporid(req.params.id)
-    res.status(200).json(posts[index]);
-});
